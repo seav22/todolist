@@ -1,7 +1,8 @@
 const mysql = require("mysql2/promise");
+let connection;
 
 const createConnection = async () => {
-  const connection = await mysql.createConnection({
+  connection = await mysql.createConnection({
     host: "localhost",
     user: "root",
     database: "todolist",
@@ -10,6 +11,11 @@ const createConnection = async () => {
   console.log("Connection successful to the DB");
 };
 
+const getConnection = () => {
+  return connection;
+};
+
 module.exports = {
   createConnection,
+  getConnection,
 };
