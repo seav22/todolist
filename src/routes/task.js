@@ -20,11 +20,54 @@ router.post("/", async function (req, res) {
   try {
     const sql =
       "INSERT INTO `task`(`task_name`, `due_date`,`status`) VALUES (?, ?, ?)";
-    const values = ["limpiar ventanas", new Date(), "done"];
+    const values = [req.body.task_name, new Date(), "pending"];
 
     const [result] = await db.getConnection().execute(sql, values);
 
     console.log(result);
+    console.log(req.body);
+
+    res.json({
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.delete("/:id", async function (req, res) {
+  try {
+    const sql = "DELETE FROM `task` WHERE `id` = ? LIMIT 1";
+    const values = [req.params.id];
+
+    const [result, fields] = await db.getConnection().execute(sql, values);
+
+    console.log(result);
+    console.log(fields);
+
+    res.json({
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.put("/:id", async function (req, res) {
+  try {
+    const sql =
+      "UPDATE `task` SET `task_name` = ?, `due_date` = ?, `status` = ? WHERE `id` = ? LIMIT 1";
+    const values = [
+      req.body.task_name,
+      new Date(),
+      req.body.status,
+      req.params.id,
+    ];
+
+    const [result, fields] = await db.getConnection().execute(sql, values);
+
+    console.log(result);
+    console.log(fields);
 
     res.json({
       result,
